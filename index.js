@@ -172,7 +172,7 @@ run().catch(console.dir);
 
 /////////////////////////////////////////////////////////////////////////////////
 app.get('/', (req, res) => {
-    res.send('Hello Manufacturer Website!');
+    res.send('Hello Manufacturer Website updated !');
 })
 
 app.listen(port, () => {
