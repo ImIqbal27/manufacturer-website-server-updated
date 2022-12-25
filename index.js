@@ -129,45 +129,13 @@ async function run() {
         /////////////////////////// /////////////////////////////////////////////////////
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
     finally {
 
     }
-
 }
 
-
-
-
-
-
 run().catch(console.dir);
-
-
-
-
-
-
 
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -179,4 +147,4 @@ app.listen(port, () => {
     console.log(`Manufacturer Website listening on port ${port}`);
 })
 
-module.exports = app;
+// module.exports = app;
