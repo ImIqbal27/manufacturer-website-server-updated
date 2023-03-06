@@ -39,7 +39,7 @@ function verifyJWT(req, res, next) {
 ////////////////////////////////////////////////////////////////////////
 async function run() {
   try {
-    // await client.connect();
+    await client.connect();
     const productCollection = client
       .db("manufacturer_website")
       .collection("products");
@@ -149,7 +149,7 @@ run().catch(console.dir);
 
 /////////////////////////////////////////////////////////////////////////////////
 app.get("/", (req, res) => {
-  res.send("Hello Manufacturer Website updated !");
+  res.send("Hello Manufacturer Website updated index!");
 });
 
 app.listen(port, () => {
