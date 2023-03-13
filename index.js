@@ -22,20 +22,20 @@ const client = new MongoClient(uri, {
 });
 //////////////////////////// JWT // /////////////////////
 
-function verifyJWT(req, res, next) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    return res.status(401).send({ message: "UnAuthorized access" });
-  }
-  const token = authHeader.split(" ")[1];
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
-    if (err) {
-      return res.status(403).send({ message: "Forbidden access" });
-    }
-    req.decoded = decoded;
-    next();
-  });
-}
+// function verifyJWT(req, res, next) {
+//   const authHeader = req.headers.authorization;
+//   if (!authHeader) {
+//     return res.status(401).send({ message: "UnAuthorized access" });
+//   }
+//   const token = authHeader.split(" ")[1];
+//   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
+//     if (err) {
+//       return res.status(403).send({ message: "Forbidden access" });
+//     }
+//     req.decoded = decoded;
+//     next();
+//   });
+// }
 ////////////////////////////////////////////////////////////////////////
 async function run() {
   try {
@@ -70,8 +70,8 @@ async function run() {
       const result = await orderCollection.insertOne(newProduct);
       res.send(result);
     });
-    ////////////////  order data from db on user/ email based  /////////////////////////////
-    app.get("/order", verifyJWT, async (req, res) => {
+    ////////////////  order data from db on user/ email based  ///  verifyJWT,//////////////////////////
+    app.get("/order", async (req, res) => {
       const userEmail = req.query.userEmail;
       const decodedEmail = req.decoded.email;
       if (userEmail == decodedEmail) {
@@ -92,12 +92,13 @@ async function run() {
         $set: user,
       };
       const result = await userCollection.updateOne(filter, updateDoc, options);
-      const token = jwt.sign(
-        { email: email },
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "999999999999999h" }
-      );
-      res.send({ result, token });
+      // const token = jwt.sign(
+      //   { email: email },
+      //   process.env.ACCESS_TOKEN_SECRET,
+      //   { expiresIn: "999999999999999h" }
+      // );
+      // res.send({ result, token });
+      res.send({ result });
     });
     /////////////////// put admin user  //////////////////////////////////////////////////////////
     // app.put('/user/admin/:email', async (req, res) => {
@@ -109,8 +110,8 @@ async function run() {
     //     const result = await userCollection.updateOne(filter, updateDoc);
     //     res.send(result);
     // });
-    // ///////////////////////  create admin ///////////
-    app.put("/user/admin/:email", verifyJWT, async (req, res) => {
+    // ///////////////////////  create admin /////////// verifyJWT,
+    app.put("/user/admin/:email", async (req, res) => {
       const email = req.params.email;
       const requester = req.decoded.email;
       const requesterAccount = await userCollection.findOne({
@@ -135,8 +136,8 @@ async function run() {
       const isAdmin = user.role === "admin";
       res.send({ admin: isAdmin });
     });
-    // ///////////////////  get all  user //////////////////////////////////////////////
-    app.get("/user", verifyJWT, async (req, res) => {
+    // ///////////////////  get all  user //////////////////////////////////////////////verifyJWT,
+    app.get("/user", async (req, res) => {
       const users = await userCollection.find().toArray();
       res.send(users);
     });
